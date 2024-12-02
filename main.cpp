@@ -13,9 +13,11 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
+            game.handleClick(event);
         }
-
+        
         game.run(); 
+        game.update();
         window.clear();
         game.render(window); 
         window.display();
