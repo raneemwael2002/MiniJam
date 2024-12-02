@@ -13,7 +13,6 @@ int main() {
     b2World world(gravity);
 
 
-   // Player player(world, 400.f, 300.f, 20.f, 30.f);
     Player player(world, window.getSize().x / 2.f, 750.f, 20.f, SCALE);
 
     b2BodyDef groundDef;
@@ -38,7 +37,6 @@ int main() {
 
     
     
-    // Game loop
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Event event;
@@ -56,18 +54,11 @@ int main() {
         world.Step(timeStep, velocityIterations, positionIterations);
 
         ballShape.setPosition(player.getPosition().x * SCALE, player.getPosition().y * SCALE);
-       // ballShape.setRotation(ball->GetAngle() * 180 / b2_pi); // Rotation is optional here
 
-        // Render
+        
         window.clear();
-      //  std::cout << player.getPosition().x <<" "<< player.getPosition().y<<std::endl;
-
        player.wallCollision(&window);
-      //std::cout << player.getPosition().x << " " << player.getPosition().y << std::endl;
-
        player.handleInput();
-       //std::cout << player.getPosition().x << " " << player.getPosition().y << std::endl;
-
         player.update();
         player.draw(window);
         window.draw(ballShape);

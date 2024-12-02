@@ -55,36 +55,6 @@ void Player::applyForce(const b2Vec2& force) {
     body->ApplyForceToCenter(force, true);
 }
 
-//void Player::wallCollision(sf::RenderTarget* window) {
-//    b2Vec2 currentPosition = body->GetPosition();
-//    float radius = shape.getRadius();
-//
-//
-//    if (currentPosition.x - radius < 15.f) {
-//        currentPosition.x = 15.f + radius;
-//    }
-//
-//
-//    if (currentPosition.x + radius >= window->getSize().x - 35.f) {
-//        currentPosition.x = window->getSize().x - radius - 35.f;
-//    }
-//
-//
-//    if (currentPosition.y - radius < 15.f) {
-//        currentPosition.y = 15.f + radius;
-//    }
-//
-//
-//    if (currentPosition.y + radius > window->getSize().y - 35.f) {
-//        currentPosition.y = window->getSize().y - radius - 35.f;
-//    }
-//
-//    body->SetTransform(currentPosition, body->GetAngle());
-//    shape.setPosition(currentPosition.x * scale, currentPosition.y * scale);
-//
-//    
-//}
-
 
 void Player::wallCollision(sf::RenderTarget* window) {
     b2Vec2 currentPosition = body->GetPosition();
@@ -192,7 +162,6 @@ void Player::handleInput() {
         
     }
 
-    // Set new position to the Box2D body (apply directly)
     body->SetTransform(currentPosition, body->GetAngle());
 }
 
