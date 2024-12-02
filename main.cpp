@@ -1,18 +1,20 @@
+#pragma once
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 #include"Player.h"
+#include"projectile.h"
 #include<iostream>
 const float SCALE = 4.0f; 
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Dynamic Ball Example");
+    sf::RenderWindow window(sf::VideoMode(900, 800), "Dynamic Ball Example");
 
     b2Vec2 gravity(0.f, 0.0f);
     b2World world(gravity);
 
 
    // Player player(world, 400.f, 300.f, 20.f, 30.f);
-    Player player(world, window.getSize().x / 2.f, window.getSize().y / 2.f, 20.f, SCALE);
+    Player player(world, window.getSize().x / 2.f, 750.f, 20.f, SCALE);
 
     b2BodyDef groundDef;
     groundDef.type = b2_staticBody;
@@ -43,6 +45,9 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+                player.shoot();
+            }
         }
 
         float timeStep = 1.0f / 60.0f; // 60 FPS
@@ -66,6 +71,7 @@ int main() {
         player.update();
         player.draw(window);
         window.draw(ballShape);
+      
         window.display();
         
     }

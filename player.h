@@ -3,15 +3,18 @@
 #pragma once
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
-
+#include<vector>
+#include"projectile.h"
 class Player {
 private:
+    b2World& world;
     b2Body* body;         
     sf::CircleShape shape; 
     float radius;         
     float scale;          
     float moveSpeed;
     sf::Vector2f velocity;
+    std::vector <Projectile> projectiles;
 public:
     
     Player(b2World& world, float x, float y, float r, float scaleFactor=4.0f);
@@ -30,7 +33,7 @@ public:
 
     void wallCollision(sf::RenderTarget* target);
 
-    void shoot(b2Vec2 body);
+    void shoot();
 };
 
 #endif
