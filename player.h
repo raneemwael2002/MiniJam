@@ -14,7 +14,7 @@ private:
     sf::Vector2f velocity;
 public:
     
-    Player(b2World& world, float x, float y, float r, float scaleFactor=0.4f);
+    Player(b2World& world, float x, float y, float r, float scaleFactor=4.0f);
 
     ~Player();
 
@@ -29,6 +29,8 @@ public:
     void handleInput();
 
     void wallCollision(sf::RenderTarget* target);
+
+    void shoot(b2Vec2 body);
 };
 
 #endif

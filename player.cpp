@@ -47,11 +47,73 @@ void Player::applyForce(const b2Vec2& force) {
     body->ApplyForceToCenter(force, true);
 }
 
+//void Player::wallCollision(sf::RenderTarget* window) {
+//    b2Vec2 currentPosition = body->GetPosition();
+//    float radius = shape.getRadius();
+//
+//
+//    if (currentPosition.x - radius < 15.f) {
+//        currentPosition.x = 15.f + radius;
+//    }
+//
+//
+//    if (currentPosition.x + radius >= window->getSize().x - 35.f) {
+//        currentPosition.x = window->getSize().x - radius - 35.f;
+//    }
+//
+//
+//    if (currentPosition.y - radius < 15.f) {
+//        currentPosition.y = 15.f + radius;
+//    }
+//
+//
+//    if (currentPosition.y + radius > window->getSize().y - 35.f) {
+//        currentPosition.y = window->getSize().y - radius - 35.f;
+//    }
+//
+//    body->SetTransform(currentPosition, body->GetAngle());
+//    shape.setPosition(currentPosition.x * scale, currentPosition.y * scale);
+//
+//    
+//}
+
+
+void Player::wallCollision(sf::RenderTarget* window) {
+    b2Vec2 currentPosition = body->GetPosition();
+    float radius = shape.getRadius();
+
+    // Correcting boundary checks based on scale
+    if (currentPosition.x - radius < 15.f / scale) {
+        currentPosition.x = 15.f / scale + radius;
+    }
+
+    if (currentPosition.x + radius >= window->getSize().x / scale - 35.f / scale) {
+        currentPosition.x = window->getSize().x / scale - radius - 35.f / scale;
+    }
+
+    if (currentPosition.y - radius < 15.f / scale) {
+        currentPosition.y = 15.f / scale + radius;
+    }
+
+    if (currentPosition.y + radius > window->getSize().y / scale - 35.f / scale) {
+        currentPosition.y = window->getSize().y / scale - radius - 35.f / scale;
+    }
+
+    body->SetTransform(currentPosition, body->GetAngle());
+
+    // Updating shape position with proper scaling
+    shape.setPosition(currentPosition.x * scale, currentPosition.y * scale);
+}
+
+
+
+
 
 void Player::update() {
     b2Vec2 position = body->GetPosition();
     shape.setPosition(position.x * scale, position.y * scale); // Convert Box2D to SFML units
     shape.setRotation(body->GetAngle() * 180 / b2_pi);
+   
 }
 
 
@@ -60,9 +122,10 @@ void Player::handleInput() {
     b2Vec2 currentPosition = body->GetPosition();
 
     
-    float moveSpeed = 0.005f;  
+    float moveSpeed = 0.1f;  
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        currentPosition.x -= moveSpeed; // Move left
+        currentPosition.x -= moveSpeed;
+        
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         currentPosition.x += moveSpeed; // Move right
@@ -83,34 +146,5 @@ void Player::handleInput() {
     body->SetTransform(currentPosition, body->GetAngle());
 }
 
-
-//void Player::wallCollision(sf::RenderTarget* target) {
-//    // Check collision for the head of the snake
-//    if (!snakeBody.empty()) {
-//        sf::CircleShape& head = snakeBody[0];
-//        float radius = head.getRadius();
-//
-//        // Left wall collision (handled as per your code)
-//        if (head.getPosition().x < 15.f) {
-//            head.setPosition(15.f, head.getPosition().y);  // Keep it at the left border
-//        }
-//
-//        // Right wall collision
-//        if (head.getPosition().x + radius >= target->getSize().x - 35.f) {
-//            head.setPosition(target->getSize().x - radius - 35.f, head.getPosition().y);  // Keep it within the right border
-//        }
-//
-//        // Top wall collision
-//        if (head.getPosition().y < 15.f) {
-//            head.setPosition(head.getPosition().x, 15.f);  // Keep it at the top border
-//        }
-//
-//        // Bottom wall collision
-//        if (head.getPosition().y + radius > target->getSize().y - 35.f) {
-//            head.setPosition(head.getPosition().x, target->getSize().y - radius - 35.f);  // Keep it within the bottom border
-//        }
-//    }
-//}
-//
 
 

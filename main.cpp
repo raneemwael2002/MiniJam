@@ -1,7 +1,8 @@
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 #include"Player.h"
-const float SCALE = 30.0f; 
+#include<iostream>
+const float SCALE = 4.0f; 
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Dynamic Ball Example");
@@ -10,7 +11,8 @@ int main() {
     b2World world(gravity);
 
 
-    Player player(world, 400.f, 600.f, 20.f, 30.f);
+   // Player player(world, 400.f, 300.f, 20.f, 30.f);
+    Player player(world, window.getSize().x / 2.f, window.getSize().y / 2.f, 20.f, SCALE);
 
     b2BodyDef groundDef;
     groundDef.type = b2_staticBody;
@@ -53,8 +55,16 @@ int main() {
 
         // Render
         window.clear();
-        player.handleInput();
+      //  std::cout << player.getPosition().x <<" "<< player.getPosition().y<<std::endl;
+
+       player.wallCollision(&window);
+      //std::cout << player.getPosition().x << " " << player.getPosition().y << std::endl;
+
+       player.handleInput();
+       //std::cout << player.getPosition().x << " " << player.getPosition().y << std::endl;
+
         player.update();
+        player.draw(window);
         window.draw(ballShape);
         window.display();
         
