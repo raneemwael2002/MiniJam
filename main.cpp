@@ -7,7 +7,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Taxi Game");
     window.setFramerateLimit(60);
     TaxiTexture taxiTexture;
-    if (!taxiTexture.isLoaded()) {
+       if (!taxiTexture.isLoaded()) {
         return -1;
     }
     Game game(window, taxiTexture);

@@ -9,6 +9,6 @@ public:
     void setPosition(const sf::Vector2f& position);
     sf::Vector2f getPosition() const;
 
-private:
     sf::Sprite sprite;
+private:
 };
