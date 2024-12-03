@@ -1,6 +1,7 @@
 #pragma once
 #include "player.h"
 #include"converter.h"
+#include <SFML/Audio.hpp>
 #include"projectile.h"
 #include<iostream>
 
@@ -31,6 +32,8 @@ Player::Player(b2World& world, float x, float y, float r, float scaleFactor)
     shape.setFillColor(sf::Color::Red);
     shape.setOrigin(radius, radius); 
     shape.setPosition(x, y);
+
+   
 }
 
 Player::~Player() {
@@ -85,6 +88,13 @@ void Player::wallCollision(sf::RenderTarget* window) {
 
 void Player::shoot()
 {
+    sf::SoundBuffer jumpBuffer;
+    if (!jumpBuffer.loadFromFile("jump.wav")) {
+        std::cerr << "Error loading jump.wav" << std::endl;
+       
+    }
+    sf::Sound jumpSound;
+    jumpSound.setBuffer(jumpBuffer);
     static sf::Clock clock;
     std::cout << "Space pressed!" << std::endl;
 
@@ -94,6 +104,7 @@ void Player::shoot()
             float speed = 10.0f;
             float angle = -90.f * (3.14f / 180.f); // Fixed upward angle
             projectiles.emplace_back(world, shape.getPosition().x, shape.getPosition().y, speed, angle, 5.f, scale);
+            jumpSound.play();
             std::cout << "Projectile created successfully!" << std::endl;
         }
         catch (const std::exception& e) {
@@ -125,7 +136,7 @@ void Player::update() {
 
     
 
-void Player::handleInput() {
+void Player::handleInput(sf::Sound &sound) {
     b2Vec2 currentPosition = body->GetPosition();
     static sf::Clock clock;
     
@@ -145,8 +156,9 @@ void Player::handleInput() {
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        sound.play();
         std::cout << "Space pressed!" << std::endl;
-        float cooldownTime = 0.3f;
+        float cooldownTime = 0.1f;
         if (clock.getElapsedTime().asSeconds() > cooldownTime) {
             try {
                 float speed = 10.0f;
@@ -158,8 +170,12 @@ void Player::handleInput() {
                 std::cerr << "Error creating projectile: " << e.what() << std::endl;
             }
             clock.restart();
+            
+           
+
         }
         
+    //    shoot();
     }
 
     body->SetTransform(currentPosition, body->GetAngle());

@@ -2,6 +2,7 @@
 #define PLAYER_H
 #pragma once
 #include <Box2D/Box2D.h>
+#include<SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include<vector>
 #include"projectile.h"
@@ -29,7 +30,7 @@ public:
 
     void applyForce(const b2Vec2& force);
 
-    void handleInput();
+    void handleInput(sf::Sound& sound);
 
     void wallCollision(sf::RenderTarget* target);
 
