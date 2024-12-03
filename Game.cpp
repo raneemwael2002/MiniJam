@@ -2,8 +2,9 @@
 #include <iostream>
 #include <random>
 
-Game::Game(sf::RenderWindow& window)
-    : window(window), world(b2Vec2(0.f, 9.8f)) { // Initialize Box2D world with gravity
+Game::Game(sf::RenderWindow& window, const TaxiTexture& texture)
+    : window(window), texture(texture) ,
+world(b2Vec2(0.f, 9.8f)) { // Initialize Box2D world with gravity
     createTaxi();
     setupGround(); // Set up the ground for collectables
 }
@@ -30,7 +31,6 @@ void Game::run() {
         createCollectables();
         clock.restart();
     }
-   
 }
 
 
@@ -41,7 +41,9 @@ void Game::update()
 }
 
 
-   
+void fallRandome() {
+
+};
 
 
 void Game::render(sf::RenderWindow& window) {
@@ -63,23 +65,23 @@ void Game::updateTaxis() {
     const float spacing = 50.f;
     const float lineHeight = 50.f;
     const float verticalSpeed = 5.f;
-    const float leftMargin = 200.f;
+    const float Margin = 200.f;
 
     for (size_t i = 0; i < taxies.size(); ++i) {
         sf::Vector2f position = isMoving[i] ? taxies[i].getPosition()
-            : sf::Vector2f(taxies[i].getPosition().x, (int)(i / 10) * 10 + 20);
+            : sf::Vector2f(taxies[i].getPosition().x, (int)(i / 10) * 10 + 50);
 
-        if (position.y <= (int)(i / 10) * 10 + 20) {
+        if (position.y <= (int)(i / 10) * 100 + 50) {
             isMoving[i] = false;
             if (i > 0) {
                 sf::Vector2f prevPosition = taxies[i - 1].getPosition();
 
-                if (prevPosition.x - spacing < leftMargin) {
-                    position.x = window.getSize().x - spacing * 4;
+                if (prevPosition.x - spacing < Margin) {
+                    position.x = window.getSize().x - Margin;
                     position.y = prevPosition.y + lineHeight;
                 }
                 else {
-                    position.x = prevPosition.x - spacing;
+                    position.x = prevPosition.x - spacing*2;
                     position.y = prevPosition.y;
                 }
             }
@@ -97,13 +99,16 @@ void Game::updateTaxis() {
 }
 
 void Game::createTaxi() {
+    // Define positions for the taxis
     sf::Vector2f bottomRight(window.getSize().x - 200.f, window.getSize().y - 40.f);
-    Taxi taxi(20.f, bottomRight, sf::Color::Yellow);
-    taxies.push_back(taxi);
+    sf::Vector2f bottomLeft(window.getSize().x - 600.f, window.getSize().y - 40.f);
+    sf::Vector2f taxiSize(100.f, 50.f);
+
+    Taxi rightTaxi(texture, bottomRight, taxiSize);
+    taxies.push_back(rightTaxi);
     isMoving.push_back(true);
 
-    sf::Vector2f bottomLeft(window.getSize().x - 600.f, window.getSize().y - 40.f);
-    Taxi leftTaxi(20.f, bottomLeft, sf::Color::Yellow);
+    Taxi leftTaxi(texture, bottomLeft, taxiSize);
     taxies.push_back(leftTaxi);
     isMoving.push_back(true);
 }
@@ -124,8 +129,15 @@ void Game::createCollectables() {
     collectables.emplace_back(world, 5.f, initialPosition, sf::Color::Red);
 }
 
-void Game::handleClick(sf::Event& event) {
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
-        createCollectables(); // Create a collectable on Space key press
-    }
-}
+//void Game::createCollectables() {
+//    for (const auto& taxi : taxies) {
+//        sf::Vector2f initialPosition = taxi.getPosition();
+//        collectables.emplace_back(world, 5.f, initialPosition, sf::Color::Red);
+//    }
+//}
+
+//void Game::handleClick(sf::Event& event) {
+//    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+//        createCollectables(); // Create a collectable on Space key press
+//    }
+//}
