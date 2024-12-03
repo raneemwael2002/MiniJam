@@ -93,17 +93,27 @@ int main() {
 
 
 	if (currentState == GameState::MAIN_MENU) {
+		mainMenuSound.play();
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		
+		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+		if (playButton.contains(mousePos.x, mousePos.y)) {
+				
+				std::cout<<"before stop\n";
+				mainMenuSound.stop();
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-			if (playButton.contains(mousePos.x, mousePos.y)) {
+				std::cout << "stop";
 				currentState = GameState::GAMEPLAY; 
+
+				jumpSound.play();
 			}
 			else if (exitButton.contains(mousePos.x, mousePos.y)) {
+				mainMenuSound.stop();
 				currentState = GameState::EXIT;
 			}
 		}
-	}
+	
 
 
 	b2Vec2 gravity(0.f, 0.0f);
@@ -155,12 +165,12 @@ int main() {
 
 		window.clear();
 		
-
+		bool isPlay = true;
 		
 		switch (currentState) {
 
 		case GameState::MAIN_MENU: {
-			mainMenuSound.play();
+			
 
 			if (animationClock.getElapsedTime().asSeconds() > 0.1f) { // 0.1s per frame
 				//backgroundSprite.setPosition(sf::Vector2f(50, 0));
@@ -191,6 +201,8 @@ int main() {
 
 		case GameState::GAMEPLAY: {
 			// Gameplay logic
+			mainMenuSound.stop();
+			jumpSound.play();
 			int32 velocityIterations = 8;
 			int32 positionIterations = 3;
 			world.Step(timeStep, velocityIterations, positionIterations);
